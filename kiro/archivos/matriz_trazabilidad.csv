@@ -1,0 +1,17 @@
+requisito,origen,texto,codigo,pruebas,resultado,estado
+REQ-01,ADDW,"MIENTRAS la velocidad sea de 50 km/h o más, CUANDO Mirada_Fuera esté activa continuamente durante 3500 ms o más, EL DMS DEBE emitir una alerta de distracción.","logica_alerta.py: 21, 28, 47, 162, 169, 172",3,3/3 pasan,Completo
+REQ-02,ADDW,"MIENTRAS la velocidad sea de 20 km/h o más y menor de 50 km/h, CUANDO Mirada_Fuera esté activa continuamente durante 6000 ms o más, EL DMS DEBE emitir una alerta de distracción.","logica_alerta.py: 22, 47, 162, 170, 174",3,3/3 pasan,Completo
+REQ-03,SUPUESTO,"MIENTRAS la velocidad sea menor a 20 km/h, EL DMS DEBE inhibir las alertas de distracción.","logica_alerta.py: 27, 153, 154, 158, 160",2,2/2 pasan,Completo
+REQ-04,SUPUESTO,"CUANDO Ojos_Cerrados esté activo continuamente durante 2000 ms o más, EL DMS DEBE emitir una alerta de somnolencia.","logica_alerta.py: 23, 48, 136, 140",2,2/2 pasan,Completo
+REQ-05,SUPUESTO,"MIENTRAS la velocidad sea menor a 20 km/h, EL DMS DEBE continuar monitoreando somnolencia y emitir alertas de Ojos_Cerrados.",logica_alerta.py: 133,1,1/1 pasan,Completo
+REQ-06,SUPUESTO,"CUANDO el Modelo_IA no detecte un rostro visible continuamente durante 2000 ms o más, EL DMS DEBE emitir una alerta de monitoreo no disponible.","logica_alerta.py: 24, 49, 118, 122",2,2/2 pasan,Completo
+REQ-07,SUPUESTO,"MIENTRAS una alerta de distracción esté activa, CUANDO Mirada_Fuera siga activa, EL DMS DEBE mantener la alerta de distracción.","logica_alerta.py: 52, 177",1,1/1 pasan,Completo
+REQ-08,SUPUESTO,"MIENTRAS una alerta de distracción esté activa, CUANDO Mirada_Fuera se desactive, EL DMS DEBE cancelar la alerta de distracción dentro de 100 ms.","logica_alerta.py: 52, 182, 184",1,1/1 pasan,Completo
+REQ-09,SUPUESTO,"MIENTRAS una alerta de somnolencia esté activa, CUANDO Ojos_Cerrados siga activo, EL DMS DEBE mantener la alerta de somnolencia.","logica_alerta.py: 52, 142",1,1/1 pasan,Completo
+REQ-10,SUPUESTO,"MIENTRAS una alerta de somnolencia esté activa, CUANDO Ojos_Cerrados se desactive, EL DMS DEBE cancelar la alerta de somnolencia dentro de 100 ms.","logica_alerta.py: 52, 147, 149",1,1/1 pasan,Completo
+REQ-11,SUPUESTO,"CUANDO tanto Mirada_Fuera como Ojos_Cerrados alcancen sus umbrales simultáneamente, EL DMS DEBE emitir únicamente la alerta de somnolencia.","logica_alerta.py: 52, 132",1,1/1 pasan,Completo
+REQ-12,SUPUESTO,"MIENTRAS una alerta de monitoreo no disponible esté activa, EL DMS DEBE suprimir todas las alertas de distracción y somnolencia.","logica_alerta.py: 52, 116, 123, 124",1,1/1 pasan,Completo
+REQ-13,SUPUESTO,"CUANDO la Logica_Decision reciba un Cuadro, EL DMS DEBE procesar los siguientes datos: tiempo en ms (entero), velocidad en km/h (número con un decimal), rostro_visible (booleano), mirada_fuera (booleano), ojos_cerrados (booleano).","logica_alerta.py: 84, 100",4,4/4 pasan,Completo
+REQ-14,SUPUESTO,"CUANDO la Logica_Decision procese un Cuadro, EL DMS DEBE devolver exactamente una de estas alertas: ""ninguna"", ""distraccion"", ""somnolencia"", o ""monitoreo_no_disponible"".","logica_alerta.py: 125, 186, 187",1,1/1 pasan,Completo
+REQ-15,SUPUESTO,"CUANDO Mirada_Fuera se desactive antes de alcanzar el umbral de alerta, EL DMS DEBE reiniciar el temporizador de distracción a 0 ms.","logica_alerta.py: 47, 155, 157, 179, 181",1,1/1 pasan,Completo
+REQ-16,SUPUESTO,"CUANDO Ojos_Cerrados se desactive antes de alcanzar el umbral de alerta, EL DMS DEBE reiniciar el temporizador de somnolencia a 0 ms.","logica_alerta.py: 48, 144, 146",1,1/1 pasan,Completo

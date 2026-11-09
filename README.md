@@ -2,6 +2,8 @@
 
 Material de la conferencia de José Jorge Arreguin Martinez en CIITEC 2026, TecNM Celaya (11 de noviembre de 2026): *La IA en la ingeniería de software de los vehículos inteligentes*.
 
+Sitio: https://jorgearreguin.github.io/ciitec-2026/
+
 | Archivo | Qué es |
 | --- | --- |
 | `index.html` | Portada con los enlaces al material |
@@ -9,6 +11,8 @@ Material de la conferencia de José Jorge Arreguin Martinez en CIITEC 2026, TecN
 | `demo.html` | Demo interactiva «Cómo ve una CNN»; funciona sin internet |
 | `laboratorio/laboratorio_edge_ai.zip` | Laboratorio: Kiro, trazabilidad, lógica del DMS y cuantización |
 | `laboratorio/c/` | La tabla de verdad de la alerta en C y sus pruebas |
+| `kiro/` | Tutorial paso a paso con Kiro: capturas, la spec revisada, el código, las pruebas y la matriz de trazabilidad |
+| `qr/` | El código QR que lleva a este sitio, en PNG y SVG |
 
 Para compilar y correr las pruebas en C:
 

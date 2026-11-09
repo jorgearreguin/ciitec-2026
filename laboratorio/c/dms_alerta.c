@@ -1,4 +1,5 @@
 /* dms_alerta.c: tabla de verdad de la alerta del DMS (reglas 1 a 7) */
+/* DS_DISTRAIDO: el modelo ve la mirada en la zona 3 (ADDW).          */
 #include <stdint.h>
 #include "dms_alerta.h"
 
@@ -10,15 +11,15 @@
 Alerta_t DMS_Evaluar(Ignicion_t     ignicion,
                      DriverStatus_t estado,
                      uint16_t       velocidad_kmh,
-                     uint32_t       t_cerrados_ms)
+                     uint32_t       t_zona3_ms)
 {
     Alerta_t alerta;
 
-    if (ignicion != IGN_ON)                      /* regla 1 */
+    if (ignicion != IGN_ON)                      /* regla 1 · SUPUESTO */
     {
         alerta = ALERTA_NO;
     }
-    else if (estado != DS_OJOS_CERRADOS)         /* regla 2 */
+    else if (estado != DS_DISTRAIDO)             /* regla 2 */
     {
         alerta = ALERTA_NO;
     }
@@ -28,11 +29,11 @@ Alerta_t DMS_Evaluar(Ignicion_t     ignicion,
     }
     else if (velocidad_kmh < VEL_ALTA_KMH)       /* reglas 4 y 5 · REQ-02 */
     {
-        alerta = (t_cerrados_ms >= T_VEL_MEDIA_MS) ? ALERTA_SI : ALERTA_NO;
+        alerta = (t_zona3_ms >= T_VEL_MEDIA_MS) ? ALERTA_SI : ALERTA_NO;
     }
     else                                         /* reglas 6 y 7 · REQ-01 */
     {
-        alerta = (t_cerrados_ms >= T_VEL_ALTA_MS) ? ALERTA_SI : ALERTA_NO;
+        alerta = (t_zona3_ms >= T_VEL_ALTA_MS) ? ALERTA_SI : ALERTA_NO;
     }
 
     return alerta;                               /* un solo punto de salida */

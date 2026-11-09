@@ -509,7 +509,7 @@ footer { font-size: 13px; color: var(--dim); margin-top: auto; }
       <div class="blk" data-istep="2"><p class="lab" style="margin:0">3 · Red con pesos congelados</p><svg class="netsvg" id="i-svg" viewBox="0 0 640 390" role="img" aria-label="La red entrenada durante la inferencia"></svg></div>
       <div style="display:grid;gap:14px">
         <div class="blk" data-istep="3"><p class="lab" style="margin:0">4 · Probabilidad</p><div class="bars" id="i-out"></div><div class="verdict" id="i-verdict"></div></div>
-        <div class="blk" data-istep="4"><p class="lab" style="margin:0">5 · Lógica determinista</p><p class="logic">Si los ojos siguen cerrados <b>3.5 s a 50 km/h o más</b>, o <b>6 s entre 20 y 49 km/h</b>, alerta (REQ-01, REQ-02). La red opina; la lógica decide.</p></div>
+        <div class="blk" data-istep="4"><p class="lab" style="margin:0">5 · Lógica determinista</p><p class="logic">La probabilidad es solo una señal. <b>Si hay alerta, y cuándo,</b> lo decide una lógica con requisitos y pruebas (escena 11). La red opina; la lógica decide.</p></div>
       </div>
     </div>
     <div class="ops">
@@ -569,7 +569,7 @@ footer { font-size: 13px; color: var(--dim); margin-top: auto; }
   <div class="stage">
     <div class="demo">
       <div style="display:grid;gap:12px">
-        <svg class="eyev" id="d-svg" viewBox="0 12 600 262" role="img" aria-label="Ojo con los 6 puntos que usa el EAR"></svg>
+        <svg class="eyev" id="d-svg" viewBox="0 0 600 280" role="img" aria-label="Vista lateral del conductor: la línea de su mirada, la horizontal y el plano a 30 grados hacia abajo. Debajo de ese plano está la zona 3, donde queda el celular."></svg>
         <div class="ear" id="d-ear"></div>
       </div>
       <div class="state">
@@ -577,7 +577,7 @@ footer { font-size: 13px; color: var(--dim); margin-top: auto; }
         <div class="chips" id="d-ign"></div>
         <p class="lab" style="margin:6px 0 0">Velocidad</p>
         <div class="chips" id="d-speed"></div>
-        <p class="lab" style="margin:6px 0 0">Tiempo con los ojos cerrados</p>
+        <p class="lab" style="margin:6px 0 0">Tiempo con la mirada en la zona 3</p>
         <div class="timer"><div class="track"><div class="fill" id="d-tfill"></div></div></div>
         <p class="mono" id="d-ttext" style="color:var(--muted)"></p>
         <div class="alert" id="d-alert">Sin alerta</div>
@@ -586,16 +586,16 @@ footer { font-size: 13px; color: var(--dim); margin-top: auto; }
     <div class="tt-head"><p class="lab" style="margin:0">Tabla de verdad de la lógica de negocio</p><button class="btn sm" id="d-code" type="button">{ } Ver la lógica en C</button></div>
     <div class="tt-wrap">
       <table class="tt" id="d-tt">
-        <thead><tr><th>Regla</th><th>Ignición</th><th>DriverStatus</th><th>Velocidad</th><th>Ojos cerrados</th><th>Resultado</th></tr>
+        <thead><tr><th>Regla</th><th>Ignición</th><th>DriverStatus</th><th>Velocidad</th><th>Mirada en zona 3</th><th>Resultado</th></tr>
           <tr class="now" id="d-now"><td>Ahora</td><td></td><td></td><td></td><td></td><td></td></tr></thead>
         <tbody>
           <tr><td>1</td><td class="sig">≠ ON<small>OFF, ACC…</small></td><td class="any">cualquiera</td><td class="any">cualquiera</td><td class="any">cualquiera</td><td><span class="res">No alertar</span><small>DMS inactivo</small></td></tr>
           <tr><td>2</td><td class="sig">ON</td><td class="sig">ATENTO</td><td class="any">cualquiera</td><td class="any">cualquiera</td><td><span class="res">No alertar</span><small>conductor atento</small></td></tr>
-          <tr><td>3</td><td class="sig">ON</td><td class="sig">OJOS_CERRADOS</td><td class="sig">&lt; 20 km/h</td><td class="any">cualquiera</td><td><span class="res">No alertar</span><small>REQ-03</small></td></tr>
-          <tr><td>4</td><td class="sig">ON</td><td class="sig">OJOS_CERRADOS</td><td class="sig">20 a 49 km/h</td><td class="sig">&lt; 6 s</td><td><span class="res">No alertar</span><small>contando</small></td></tr>
-          <tr><td>5</td><td class="sig">ON</td><td class="sig">OJOS_CERRADOS</td><td class="sig">20 a 49 km/h</td><td class="sig">≥ 6 s</td><td><span class="res yes">Alertar</span><small>REQ-02</small></td></tr>
-          <tr><td>6</td><td class="sig">ON</td><td class="sig">OJOS_CERRADOS</td><td class="sig">≥ 50 km/h</td><td class="sig">&lt; 3.5 s</td><td><span class="res">No alertar</span><small>contando</small></td></tr>
-          <tr><td>7</td><td class="sig">ON</td><td class="sig">OJOS_CERRADOS</td><td class="sig">≥ 50 km/h</td><td class="sig">≥ 3.5 s</td><td><span class="res yes">Alertar</span><small>REQ-01</small></td></tr>
+          <tr><td>3</td><td class="sig">ON</td><td class="sig">DISTRAIDO</td><td class="sig">&lt; 20 km/h</td><td class="any">cualquiera</td><td><span class="res">No alertar</span><small>REQ-03</small></td></tr>
+          <tr><td>4</td><td class="sig">ON</td><td class="sig">DISTRAIDO</td><td class="sig">20 a 49 km/h</td><td class="sig">&lt; 6 s</td><td><span class="res">No alertar</span><small>contando</small></td></tr>
+          <tr><td>5</td><td class="sig">ON</td><td class="sig">DISTRAIDO</td><td class="sig">20 a 49 km/h</td><td class="sig">≥ 6 s</td><td><span class="res yes">Alertar</span><small>REQ-02</small></td></tr>
+          <tr><td>6</td><td class="sig">ON</td><td class="sig">DISTRAIDO</td><td class="sig">≥ 50 km/h</td><td class="sig">&lt; 3.5 s</td><td><span class="res">No alertar</span><small>contando</small></td></tr>
+          <tr><td>7</td><td class="sig">ON</td><td class="sig">DISTRAIDO</td><td class="sig">≥ 50 km/h</td><td class="sig">≥ 3.5 s</td><td><span class="res yes">Alertar</span><small>REQ-01</small></td></tr>
         </tbody>
       </table>
     </div>
@@ -604,10 +604,10 @@ footer { font-size: 13px; color: var(--dim); margin-top: auto; }
   <div class="side">
     <p class="eyebrow">En el auto</p>
     <h2>La red opina, la lógica decide</h2>
-    <p class="lead">La red de MediaPipe encuentra 478 puntos de la cara. Con 6 puntos de cada ojo se calcula el EAR, el alto del ojo entre su ancho. Si baja del 70 % de tu valor normal, la señal DriverStatus cambia a OJOS_CERRADOS. La alerta la decide una tabla de reglas determinista, con requisitos y pruebas.</p>
-    <div class="range"><label for="d-open">Apertura del ojo <output id="d-openo">100 %</output></label><input type="range" id="d-open" min="0" max="100" step="1" value="100"></div>
-    <div class="controls"><button class="btn" id="d-hold" type="button">Cerrar los ojos 7 s</button></div>
-    <ul class="points"><li>Cambia la ignición, la velocidad o la apertura del ojo: se ilumina el único renglón que se cumple. Cada renglón es un caso de prueba.</li><li>Alerta con los ojos cerrados 3.5 s o más a 50 km/h o más, o 6 s o más entre 20 y 49 km/h. Norma: Reglamento Delegado (UE) 2023/2590 (ADDW).</li><li>El EAR viene de un artículo de 2016 de Soukupová y Čech.</li></ul>
+    <p class="lead">Otra red, con la misma idea de las escenas anteriores, estima hacia dónde miras. Si la mirada baja más de 30°, entra en la zona 3 (el regazo, la consola, el celular) y la señal DriverStatus cambia a DISTRAIDO. La alerta la decide una tabla de reglas determinista, con requisitos y pruebas.</p>
+    <div class="range"><label for="d-gaze">Mirada hacia abajo <output id="d-gazeo">0°</output></label><input type="range" id="d-gaze" min="0" max="70" step="1" value="0"></div>
+    <div class="controls"><button class="btn" id="d-hold" type="button">Mirar el celular 7 s</button></div>
+    <ul class="points"><li>Cambia la ignición, la velocidad o la mirada: se ilumina el único renglón que se cumple. Cada renglón es un caso de prueba.</li><li>Alerta con la mirada en la zona 3 por 3.5 s o más a 50 km/h o más, o 6 s o más entre 20 y 49 km/h. Norma: Reglamento Delegado (UE) 2023/2590 (ADDW).</li><li>En el laboratorio, la mirada se aproxima con el giro y el cabeceo de la cabeza que calcula MediaPipe. Un DMS de auto suele usar una cámara infrarroja para ver de día y de noche.</li></ul>
   </div>
 </section>
 
@@ -628,7 +628,7 @@ footer { font-size: 13px; color: var(--dim); margin-top: auto; }
     </div>
     <pre class="code" id="c-code" tabindex="0"></pre>
     <p class="cap" id="c-stats" style="text-align:left;margin:0"></p>
-    <p class="moral">Escribir esto toma minutos. Lo difícil fue llegar aquí: encontrar la norma, convertir «avisarle de inmediato» en 3.5 s y 6 s, decidir qué pasa con la ignición y debajo de 20 km/h, y probar cada renglón en sus límites.</p>
+    <p class="moral">Escribir esto toma minutos. Lo difícil fue llegar aquí: encontrar la norma, definir qué es mirar hacia abajo (la zona 3), convertir «avisarle de inmediato» en 3.5 s y 6 s, decidir qué pasa con la ignición y debajo de 20 km/h, y probar cada renglón en sus límites.</p>
   </div>
 </div>
 </div>
@@ -1020,60 +1020,66 @@ function tick5(dt) {
 }
 
 // ---------- Escena: demo ----------
-const s6 = { open: 1, speed: 80, ign: 'ON', closedMs: 0, hold: null, tt: { target: -1, shown: -1, scan: -1, t: 0 } };
-const CX = 300, CY = 168, HW = 180, HT = 66, HB = 52.7;
-const lidY = (x, open, up) => CY + (up ? -HT : HB) * open * Math.pow(Math.max(0, 1 - (x / HW) ** 2), 0.8);
-const EAR_BASE = 0.30, EAR_UMBRAL = 0.7 * EAR_BASE;
-function earOf(open) { const d = lidY(60, open, false) - lidY(60, open, true); return (2 * d) / (2 * 2 * HW); }
-function drawEye6() {
-  const o = s6.open, svg = $('d-svg');
-  const up = [], lo = [];
-  for (let x = -HW; x <= HW; x += 6) { up.push(`${CX + x},${lidY(x, o, true).toFixed(1)}`); lo.unshift(`${CX + x},${lidY(x, o, false).toFixed(1)}`); }
-  const shape = `M${up.join(' L')} L${lo.join(' L')} Z`;
-  const p = { 1: [CX - HW, CY], 2: [CX - 60, lidY(-60, o, true)], 3: [CX + 60, lidY(60, o, true)], 4: [CX + HW, CY], 5: [CX + 60, lidY(60, o, false)], 6: [CX - 60, lidY(-60, o, false)] };
-  const lbl = { 1: [-16, 7, 'end'], 4: [16, 7, 'start'], 2: [0, -20, 'middle'], 3: [0, -20, 'middle'], 5: [0, 36, 'middle'], 6: [0, 36, 'middle'] };
-  const closed = earOf(o) < EAR_UMBRAL;
-  svg.innerHTML = `<defs><clipPath id="clip"><path d="${shape}"/></clipPath></defs>
-  <path d="M${CX - 200},${CY - 120} Q${CX},${CY - 165} ${CX + 200},${CY - 120}" stroke="#2A3F5C" stroke-width="16" fill="none" stroke-linecap="round"/>
-  <path d="${shape}" fill="#E6ECF2"/>
-  <g clip-path="url(#clip)"><circle cx="${CX}" cy="${CY}" r="62" fill="#2C6A78"/><circle cx="${CX}" cy="${CY}" r="26" fill="#0B1524"/><circle cx="${CX - 18}" cy="${CY - 18}" r="8" fill="#E6ECF2"/></g>
-  <polyline points="${up.join(' ')}" fill="none" stroke="${closed ? '#F5A524' : '#EEF1F5'}" stroke-width="5" stroke-linecap="round"/>
-  <polyline points="${lo.join(' ')}" fill="none" stroke="#8C99AB" stroke-width="2"/>
-  <line x1="${p[1][0]}" y1="${CY}" x2="${p[4][0]}" y2="${CY}" stroke="#F5A524" stroke-width="2.5" stroke-dasharray="8 7"/>
-  <line x1="${p[2][0]}" y1="${p[2][1]}" x2="${p[6][0]}" y2="${p[6][1]}" stroke="#36B9C9" stroke-width="3"/>
-  <line x1="${p[3][0]}" y1="${p[3][1]}" x2="${p[5][0]}" y2="${p[5][1]}" stroke="#36B9C9" stroke-width="3"/>
-  ${Object.entries(p).map(([k, [x, y]]) => { const [dx, dy, anchor] = lbl[k]; return `<circle cx="${x}" cy="${y}" r="9" fill="#F5A524" stroke="#0B1524" stroke-width="3"/><text x="${x + dx}" y="${y + dy}" text-anchor="${anchor}" font-family="JetBrains Mono, monospace" font-size="20" font-weight="700" fill="#EEF1F5">p${k}</text>`; }).join('')}
-  <text x="${CX - HW}" y="${CY + 44}" text-anchor="middle" font-family="Inter, Arial" font-size="15" fill="#8C99AB">esquina externa</text>
-  <text x="${CX + HW}" y="${CY + 44}" text-anchor="middle" font-family="Inter, Arial" font-size="15" fill="#8C99AB">esquina interna</text>`;
-  const v = (lidY(60, o, false) - lidY(60, o, true)), e = earOf(o);
-  $('d-ear').innerHTML = `EAR = (|p2−p6| + |p3−p5|) ÷ (2·|p1−p4|)<br>&nbsp;&nbsp;&nbsp;&nbsp;= (${v.toFixed(0)} + ${v.toFixed(0)}) ÷ ${(4 * HW).toFixed(0)} = <b style="color:${closed ? 'var(--amber)' : 'var(--teal)'}">${e.toFixed(2)}</b><br>Base al calibrar: ${EAR_BASE.toFixed(2)} · Umbral 70 %: ${EAR_UMBRAL.toFixed(2)} → <b style="color:${closed ? 'var(--amber)' : 'var(--teal)'}">${closed ? 'cerrado' : 'abierto'}</b>`;
-  $('d-openo').textContent = Math.round(o * 100) + ' %';
+const s6 = { gaze: 0, speed: 80, ign: 'ON', zonaMs: 0, hold: null, tt: { target: -1, shown: -1, scan: -1, t: 0 } };
+const EYE = [186, 84], ZONA3 = 30, CEL = 52;
+const enZona3 = (g) => Math.round(g) > ZONA3; // la zona 3 empieza debajo del plano de 30°
+function drawGaze6() {
+  const g = s6.gaze, gr = Math.round(g), z = enZona3(g), col = z ? '#F5A524' : '#36B9C9', [ex, ey] = EYE;
+  const P = (deg, r) => [ex + r * Math.cos((deg * Math.PI) / 180), ey + r * Math.sin((deg * Math.PI) / 180)];
+  const xy = ([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`;
+  const c0 = P(g - 7, 150), c1 = P(g + 7, 150), tip = P(g, 124), a1 = P(g, 54), lab = g > ZONA3 ? P(Math.min(g + 14, 76), 66) : P(Math.max(g / 2, 9), 84), z30 = P(ZONA3, 700), l30 = P(ZONA3, 330);
+  const mira = z && Math.abs(g - CEL) < 9;
+  $('d-svg').innerHTML = `<defs><linearGradient id="gzg" gradientUnits="userSpaceOnUse" x1="${ex}" y1="${ey}" x2="${P(g, 150)[0].toFixed(1)}" y2="${P(g, 150)[1].toFixed(1)}"><stop offset="0" stop-color="${col}" stop-opacity="0.5"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+  <path d="M${ex},${ey} L${xy(z30)} L${ex},${ey + 700} Z" fill="#F5A524" fill-opacity="${z ? 0.2 : 0.09}"/>
+  <path d="M344,100 L600,92 L600,156 L386,156 Q352,156 346,130 Z" fill="#172A44"/>
+  <line x1="322" y1="100" x2="350" y2="178" stroke="#3A5272" stroke-width="10" stroke-linecap="round"/>
+  <line x1="120" y1="70" x2="106" y2="238" stroke="#172A44" stroke-width="16" stroke-linecap="round"/>
+  <line x1="152" y1="132" x2="142" y2="210" stroke="#22344F" stroke-width="46" stroke-linecap="round"/>
+  <line x1="144" y1="222" x2="290" y2="230" stroke="#22344F" stroke-width="38" stroke-linecap="round"/>
+  <line x1="290" y1="230" x2="300" y2="300" stroke="#22344F" stroke-width="32" stroke-linecap="round"/>
+  <line x1="160" y1="196" x2="250" y2="190" stroke="#2E4566" stroke-width="15" stroke-linecap="round"/>
+  <g transform="rotate(-24 262 182)"><rect x="251" y="164" width="22" height="36" rx="5" fill="#3A5272"/><rect x="254" y="168" width="16" height="27" rx="2" fill="${mira ? '#F5A524' : '#0B1524'}"/></g>
+  <g transform="rotate(${(0.4 * g).toFixed(1)} ${ex} ${ey})"><circle cx="162" cy="86" r="37" fill="#2A3F5C"/><path d="M195,70 L215,100 L195,105 Z" fill="#2A3F5C"/><circle cx="${ex}" cy="${ey}" r="5.5" fill="#EEF1F5"/></g>
+  <line x1="${ex}" y1="${ey}" x2="600" y2="${ey}" stroke="#8C99AB" stroke-width="2" stroke-dasharray="6 6"/>
+  <text x="594" y="${ey - 12}" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="15" fill="#8C99AB">0° · al camino</text>
+  <line x1="${ex}" y1="${ey}" x2="${z30[0].toFixed(1)}" y2="${z30[1].toFixed(1)}" stroke="#F5A524" stroke-width="2.5" stroke-dasharray="9 7"/>
+  <text x="${(l30[0] + 10).toFixed(1)}" y="${(l30[1] - 12).toFixed(1)}" font-family="JetBrains Mono, monospace" font-size="16" font-weight="700" fill="#F5A524">30°</text>
+  <text x="400" y="262" text-anchor="middle" font-family="Inter Tight, Inter, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2" fill="#F5A524">ZONA 3</text>
+  <path d="M${ex},${ey} L${xy(c0)} L${xy(c1)} Z" fill="url(#gzg)"/>
+  <line x1="${ex}" y1="${ey}" x2="${tip[0].toFixed(1)}" y2="${tip[1].toFixed(1)}" stroke="${col}" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="${tip[0].toFixed(1)}" cy="${tip[1].toFixed(1)}" r="5" fill="${col}"/>
+  ${g > 0.5 ? `<path d="M${ex + 54},${ey} A54,54 0 0 1 ${xy(a1)}" fill="none" stroke="${col}" stroke-width="2.5"/>` : ''}
+  <rect x="${(lab[0] - 25).toFixed(1)}" y="${(lab[1] - 13).toFixed(1)}" width="50" height="26" rx="7" fill="#0B1524" fill-opacity="0.88"/>
+  <text x="${lab[0].toFixed(1)}" y="${lab[1].toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="JetBrains Mono, monospace" font-size="18" font-weight="700" fill="${col}">${gr}°</text>`;
+  const c = z ? 'var(--amber)' : 'var(--teal)';
+  $('d-ear').innerHTML = `mirada = ${gr}° hacia abajo<br>zona 3 = más de ${ZONA3}° hacia abajo<br>${gr}° ${z ? '&gt;' : '≤'} ${ZONA3}° → DriverStatus = <b style="color:${c}">${z ? 'DISTRAIDO' : 'ATENTO'}</b>`;
+  $('d-gazeo').textContent = gr + '°';
 }
 const RULE_NOTES = [
-  'Regla 1: con la ignición en cualquier valor distinto de ON, el DMS no evalúa nada.',
-  'Regla 2: DriverStatus = ATENTO; no hay nada que alertar.',
-  'Regla 3: por debajo de 20 km/h no se alerta, aunque los ojos sigan cerrados (REQ-03).',
+  'Regla 1: con la ignición distinta de ON, el DMS no evalúa nada. Es un supuesto escrito: la norma no habla de la ignición.',
+  'Regla 2: DriverStatus = ATENTO; la mirada no está en la zona 3 y no hay nada que alertar.',
+  'Regla 3: por debajo de 20 km/h no se alerta, aunque la mirada siga en la zona 3 (REQ-03).',
   'Regla 4: entre 20 y 49 km/h la lógica cuenta el tiempo; a los 6 s pasa a la regla 5.',
-  'Regla 5: 6 s o más con los ojos cerrados entre 20 y 49 km/h: alerta (REQ-02).',
+  'Regla 5: 6 s o más con la mirada en la zona 3 entre 20 y 49 km/h: alerta (REQ-02).',
   'Regla 6: a 50 km/h o más la lógica cuenta el tiempo; a los 3.5 s pasa a la regla 7.',
-  'Regla 7: 3.5 s o más con los ojos cerrados a 50 km/h o más: alerta (REQ-01).',
+  'Regla 7: 3.5 s o más con la mirada en la zona 3 a 50 km/h o más: alerta (REQ-01).',
 ];
 const ALERT_ROWS = { 4: 'Alertar · REQ-02', 6: 'Alertar · REQ-01' };
 const umbral6 = () => (s6.speed >= 50 ? 3500 : s6.speed >= 20 ? 6000 : null);
 function matchRow() {
   if (s6.ign !== 'ON') return 0;
-  if (earOf(s6.open) >= EAR_UMBRAL) return 1;
+  if (!enZona3(s6.gaze)) return 1;
   if (s6.speed < 20) return 2;
-  if (s6.speed < 50) return s6.closedMs >= 6000 ? 4 : 3;
-  return s6.closedMs >= 3500 ? 6 : 5;
+  if (s6.speed < 50) return s6.zonaMs >= 6000 ? 4 : 3;
+  return s6.zonaMs >= 3500 ? 6 : 5;
 }
 function render6() {
-  drawEye6();
-  const on = s6.ign === 'ON', closed = earOf(s6.open) < EAR_UMBRAL, t = s6.closedMs, thr = umbral6();
+  drawGaze6();
+  const on = s6.ign === 'ON', z = enZona3(s6.gaze), t = s6.zonaMs, thr = umbral6();
   $('d-tfill').style.width = (thr ? Math.min(100, (t / thr) * 100) : 0) + '%';
   $('d-ttext').textContent = thr ? `${(t / 1000).toFixed(1)} s de ${(thr / 1000).toFixed(1)} s` : `${(t / 1000).toFixed(1)} s · sin umbral debajo de 20 km/h`;
-  const status = !on ? '—' : closed ? 'OJOS_CERRADOS' : 'ATENTO';
-  const stColor = !on ? 'var(--dim)' : closed ? 'var(--amber)' : 'var(--teal)';
+  const status = !on ? '—' : z ? 'DISTRAIDO' : 'ATENTO';
+  const stColor = !on ? 'var(--dim)' : z ? 'var(--amber)' : 'var(--teal)';
   const now = $('d-now').cells;
   now[1].textContent = s6.ign; now[2].innerHTML = `<span style="color:${stColor}">${status}</span>`; now[3].textContent = s6.speed + ' km/h'; now[4].textContent = (t / 1000).toFixed(1) + ' s';
   now[5].textContent = '';
@@ -1097,21 +1103,20 @@ function chipGroup(host, values, label, get, set) {
     host.appendChild(b);
   }
 }
-chipGroup($('d-ign'), ['ON', 'ACC', 'OFF'], (v) => v, () => s6.ign, (v) => { s6.ign = v; s6.closedMs = 0; });
+chipGroup($('d-ign'), ['ON', 'ACC', 'OFF'], (v) => v, () => s6.ign, (v) => { s6.ign = v; s6.zonaMs = 0; });
 chipGroup($('d-speed'), [10, 30, 80], (v) => v + ' km/h', () => s6.speed, (v) => { s6.speed = v; });
-$('d-open').addEventListener('input', (e) => { s6.hold = null; s6.open = +e.target.value / 100; render6(); });
-function hold6() { s6.hold = { t: 0 }; }
+$('d-gaze').addEventListener('input', (e) => { s6.hold = null; s6.gaze = +e.target.value; render6(); });
+function hold6() { s6.hold = { t: 0, from: s6.gaze }; }
 $('d-hold').onclick = hold6;
 let last6 = '';
 function tick6(dt) {
   if (s6.hold) {
-    s6.hold.t += dt; const t = s6.hold.t;
-    s6.open = t < 250 ? 1 - t / 250 : t < 7250 ? 0 : t < 7500 ? (t - 7250) / 250 : 1;
-    if (t >= 7500) s6.hold = null;
-    $('d-open').value = Math.round(s6.open * 100);
+    s6.hold.t += dt; const t = s6.hold.t, a = s6.hold.from;
+    s6.gaze = t < 300 ? a + (CEL - a) * (t / 300) : t < 7300 ? CEL : t < 7600 ? CEL * (1 - (t - 7300) / 300) : 0;
+    if (t >= 7600) s6.hold = null;
+    $('d-gaze').value = Math.round(s6.gaze);
   }
-  const closed = earOf(s6.open) < EAR_UMBRAL;
-  s6.closedMs = s6.ign === 'ON' && closed ? s6.closedMs + dt : 0;
+  s6.zonaMs = s6.ign === 'ON' && enZona3(s6.gaze) ? s6.zonaMs + dt : 0;
   const T = s6.tt, target = matchRow();
   if (target !== T.target) {
     T.target = target;
@@ -1122,7 +1127,7 @@ function tick6(dt) {
     T.t += dt;
     if (T.t >= 120) { T.t = 0; if (T.scan >= T.target) { T.shown = T.target; T.scan = -1; flash6(T.shown); } else T.scan++; }
   }
-  const key = s6.open.toFixed(3) + '|' + Math.floor(s6.closedMs / 50) + '|' + s6.speed + '|' + s6.ign + '|' + T.scan + '|' + T.shown;
+  const key = s6.gaze.toFixed(1) + '|' + Math.floor(s6.zonaMs / 50) + '|' + s6.speed + '|' + s6.ign + '|' + T.scan + '|' + T.shown;
   if (key !== last6) { last6 = key; render6(); }
 }
 
@@ -1595,8 +1600,8 @@ function spaceOpt() {
 optControls();
 
 // ---------- Código C de la tabla de verdad ----------
-const C_FILES = { logic: "/* dms_alerta.c: tabla de verdad de la alerta del DMS (reglas 1 a 7) */\n#include <stdint.h>\n#include \"dms_alerta.h\"\n\n#define VEL_MINIMA_KMH    (20U)    /* REQ-03: debajo no se alerta     */\n#define VEL_ALTA_KMH      (50U)    /* REQ-01: a partir de aquí, 3.5 s */\n#define T_VEL_ALTA_MS     (3500U)  /* REQ-01: 50 km/h o más           */\n#define T_VEL_MEDIA_MS    (6000U)  /* REQ-02: de 20 a 49 km/h         */\n\nAlerta_t DMS_Evaluar(Ignicion_t     ignicion,\n                     DriverStatus_t estado,\n                     uint16_t       velocidad_kmh,\n                     uint32_t       t_cerrados_ms)\n{\n    Alerta_t alerta;\n\n    if (ignicion != IGN_ON)                      /* regla 1 */\n    {\n        alerta = ALERTA_NO;\n    }\n    else if (estado != DS_OJOS_CERRADOS)         /* regla 2 */\n    {\n        alerta = ALERTA_NO;\n    }\n    else if (velocidad_kmh < VEL_MINIMA_KMH)     /* regla 3 · REQ-03 */\n    {\n        alerta = ALERTA_NO;\n    }\n    else if (velocidad_kmh < VEL_ALTA_KMH)       /* reglas 4 y 5 · REQ-02 */\n    {\n        alerta = (t_cerrados_ms >= T_VEL_MEDIA_MS) ? ALERTA_SI : ALERTA_NO;\n    }\n    else                                         /* reglas 6 y 7 · REQ-01 */\n    {\n        alerta = (t_cerrados_ms >= T_VEL_ALTA_MS) ? ALERTA_SI : ALERTA_NO;\n    }\n\n    return alerta;                               /* un solo punto de salida */\n}\n", tests: "/* test_dms_alerta.c: un caso por renglón de la tabla, en los límites */\n/* Corre en la PC, no en la ECU.                                       */\n#include <stdint.h>\n#include <stdio.h>\n#include \"dms_alerta.h\"\n\ntypedef struct\n{\n    uint8_t        regla;\n    Ignicion_t     ignicion;\n    DriverStatus_t estado;\n    uint16_t       velocidad_kmh;\n    uint32_t       t_cerrados_ms;\n    Alerta_t       esperado;\n} Caso_t;\n\nstatic const Caso_t casos[] =\n{\n    /* regla  ignición  estado            km/h  ms      esperado  */\n    {  1U,    IGN_OFF,  DS_OJOS_CERRADOS,  80U, 9000U,  ALERTA_NO },\n    {  2U,    IGN_ON,   DS_ATENTO,         80U, 9000U,  ALERTA_NO },\n    {  3U,    IGN_ON,   DS_OJOS_CERRADOS,  19U, 9000U,  ALERTA_NO },\n    {  4U,    IGN_ON,   DS_OJOS_CERRADOS,  49U, 5999U,  ALERTA_NO },\n    {  5U,    IGN_ON,   DS_OJOS_CERRADOS,  20U, 6000U,  ALERTA_SI },\n    {  6U,    IGN_ON,   DS_OJOS_CERRADOS,  50U, 3499U,  ALERTA_NO },\n    {  7U,    IGN_ON,   DS_OJOS_CERRADOS,  50U, 3500U,  ALERTA_SI }\n};\n\nint main(void)\n{\n    uint32_t fallas = 0U;\n    uint32_t i;\n    const uint32_t total = (uint32_t)(sizeof(casos) / sizeof(casos[0]));\n\n    for (i = 0U; i < total; i++)\n    {\n        const Caso_t *c = &casos[i];\n\n        if (DMS_Evaluar(c->ignicion, c->estado, c->velocidad_kmh,\n                        c->t_cerrados_ms) != c->esperado)\n        {\n            (void)printf(\"Falla la regla %u\\n\", (unsigned int)c->regla);\n            fallas++;\n        }\n    }\n\n    (void)printf(\"%u de %u reglas pasan\\n\",\n                 (unsigned int)(total - fallas), (unsigned int)total);\n    return (fallas == 0U) ? 0 : 1;\n}\n" };
-const C_STATS = { logic: 'La función tiene 30 líneas y 4 comparaciones. Compila sin advertencias con gcc -std=c99 -Wall -Wextra -Wconversion; no se pasó por una herramienta de verificación MISRA.', tests: 'Un caso por renglón, en los valores límite: 19 y 20 km/h, 49 y 50 km/h, 5999 y 6000 ms, 3499 y 3500 ms. Las 7 pasan; si cambias un >= por >, la prueba de ese renglón falla.' };
+const C_FILES = { logic: "/* dms_alerta.c: tabla de verdad de la alerta del DMS (reglas 1 a 7) */\n/* DS_DISTRAIDO: el modelo ve la mirada en la zona 3 (ADDW).          */\n#include <stdint.h>\n#include \"dms_alerta.h\"\n\n#define VEL_MINIMA_KMH    (20U)    /* REQ-03: debajo no se alerta     */\n#define VEL_ALTA_KMH      (50U)    /* REQ-01: a partir de aquí, 3.5 s */\n#define T_VEL_ALTA_MS     (3500U)  /* REQ-01: 50 km/h o más           */\n#define T_VEL_MEDIA_MS    (6000U)  /* REQ-02: de 20 a 49 km/h         */\n\nAlerta_t DMS_Evaluar(Ignicion_t     ignicion,\n                     DriverStatus_t estado,\n                     uint16_t       velocidad_kmh,\n                     uint32_t       t_zona3_ms)\n{\n    Alerta_t alerta;\n\n    if (ignicion != IGN_ON)                      /* regla 1 · SUPUESTO */\n    {\n        alerta = ALERTA_NO;\n    }\n    else if (estado != DS_DISTRAIDO)             /* regla 2 */\n    {\n        alerta = ALERTA_NO;\n    }\n    else if (velocidad_kmh < VEL_MINIMA_KMH)     /* regla 3 · REQ-03 */\n    {\n        alerta = ALERTA_NO;\n    }\n    else if (velocidad_kmh < VEL_ALTA_KMH)       /* reglas 4 y 5 · REQ-02 */\n    {\n        alerta = (t_zona3_ms >= T_VEL_MEDIA_MS) ? ALERTA_SI : ALERTA_NO;\n    }\n    else                                         /* reglas 6 y 7 · REQ-01 */\n    {\n        alerta = (t_zona3_ms >= T_VEL_ALTA_MS) ? ALERTA_SI : ALERTA_NO;\n    }\n\n    return alerta;                               /* un solo punto de salida */\n}\n", tests: "/* test_dms_alerta.c: un caso por renglón de la tabla, en los límites */\n/* (la regla 1 usa ACC, el vecino de ON). Corre en la PC, no en la ECU. */\n#include <stdint.h>\n#include <stdio.h>\n#include \"dms_alerta.h\"\n\ntypedef struct\n{\n    uint8_t        regla;\n    Ignicion_t     ignicion;\n    DriverStatus_t estado;\n    uint16_t       velocidad_kmh;\n    uint32_t       t_zona3_ms;\n    Alerta_t       esperado;\n} Caso_t;\n\nstatic const Caso_t casos[] =\n{\n    /* regla  ignición  estado        km/h  ms      esperado  */\n    {  1U,    IGN_ACC,  DS_DISTRAIDO,  80U, 9000U,  ALERTA_NO },\n    {  2U,    IGN_ON,   DS_ATENTO,     80U, 9000U,  ALERTA_NO },\n    {  3U,    IGN_ON,   DS_DISTRAIDO,  19U, 9000U,  ALERTA_NO },\n    {  4U,    IGN_ON,   DS_DISTRAIDO,  49U, 5999U,  ALERTA_NO },\n    {  5U,    IGN_ON,   DS_DISTRAIDO,  20U, 6000U,  ALERTA_SI },\n    {  6U,    IGN_ON,   DS_DISTRAIDO,  50U, 3499U,  ALERTA_NO },\n    {  7U,    IGN_ON,   DS_DISTRAIDO,  50U, 3500U,  ALERTA_SI }\n};\n\nint main(void)\n{\n    uint32_t fallas = 0U;\n    uint32_t i;\n    const uint32_t total = (uint32_t)(sizeof(casos) / sizeof(casos[0]));\n\n    for (i = 0U; i < total; i++)\n    {\n        const Caso_t *c = &casos[i];\n\n        if (DMS_Evaluar(c->ignicion, c->estado, c->velocidad_kmh,\n                        c->t_zona3_ms) != c->esperado)\n        {\n            (void)printf(\"Falla la regla %u\\n\", (unsigned int)c->regla);\n            fallas++;\n        }\n    }\n\n    (void)printf(\"%u de %u reglas pasan\\n\",\n                 (unsigned int)(total - fallas), (unsigned int)total);\n    return (fallas == 0U) ? 0 : 1;\n}\n" };
+const C_STATS = { logic: 'La función tiene 30 líneas y 6 comparaciones. Compila sin advertencias con gcc -std=c99 -Wall -Wextra -Wconversion; no se pasó por una herramienta de verificación MISRA.', tests: 'Un caso por renglón, en los valores límite: ACC junto a ON, 19 y 20 km/h, 49 y 50 km/h, 5999 y 6000 ms, 3499 y 3500 ms. Las 7 pasan; si cambias un >= por >, la prueba de ese renglón falla.' };
 const CK = { tab: 'logic', last: null, opener: null };
 const escH = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const TOK = /(\/\*.*?\*\/)|(^\s*#\s*\w+)|\b(if|else|return|typedef|enum|struct|static|const|for|int|void|sizeof|unsigned)\b|\b(uint8_t|uint16_t|uint32_t|Alerta_t|Ignicion_t|DriverStatus_t|Caso_t)\b|\b(\d+U?)\b|\b([A-Z][A-Z0-9_]{2,})\b/g;
