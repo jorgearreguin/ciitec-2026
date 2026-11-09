@@ -28,7 +28,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 var(--
 p { margin: 0; }
 a { color: var(--teal); text-underline-offset: 3px; }
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; border-radius: 4px; }
-code { font-family: var(--mono); font-size: .88em; background: var(--panel-2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+code { font-family: var(--mono); font-size: .88em; background: var(--panel-2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; overflow-wrap: anywhere; }
 h1, h2, h3 { margin: 0; text-wrap: balance; }
 .wrap { max-width: 1240px; margin: 0 auto; }
 
@@ -158,7 +158,8 @@ footer { border-top: 1px solid var(--line); padding-block: 18px max(28px, env(sa
 <div class="layout">
   <nav class="toc" aria-label="Pasos del tutorial">
     <p>Pasos</p>
-    <a href="#antes"><span>0</span>Antes de empezar</a>
+    <a href="#antes"><span>•</span>Antes de empezar</a>
+    <a href="#python"><span>0</span>Prepara Python</a>
     <a href="#paso-1"><span>1</span>La matriz de referencia</a>
     <a href="#paso-2"><span>2</span>La carpeta correcta</a>
     <a href="#paso-3"><span>3</span>La spec desde la frase</a>
@@ -180,7 +181,7 @@ footer { border-top: 1px solid var(--line); padding-block: 18px max(28px, env(sa
       <div class="prose">
         <ul class="plain">
           <li><strong>Kiro</strong>, con tu sesión iniciada. El plan gratuito trae 50 créditos al mes y este ejercicio cabe en él.</li>
-          <li><strong>Python 3.10 o más reciente.</strong> Yo usé 3.13. La lógica y las pruebas solo usan la biblioteca estándar.</li>
+          <li><strong>Python 3.12 o 3.13 de 64 bits.</strong> Yo usé 3.13. En el paso 0 se prepara el entorno.</li>
           <li><strong>La carpeta <code>kiro_inicio</code> del laboratorio.</strong> Trae la frase del cliente, <code>trazabilidad.py</code> y tres reglas de steering que Kiro aplica siempre: <code>product</code> (la norma ADDW), <code>tech</code> (Python y unittest) y <code>trazabilidad</code> (IDs REQ-NN en todo).</li>
           <li><strong>Unas dos horas</strong>, contando las revisiones.</li>
         </ul>
@@ -198,6 +199,42 @@ footer { border-top: 1px solid var(--line); padding-block: 18px max(28px, env(sa
           <tr><td>Evidencia</td><td><code>matriz_trazabilidad.md</code></td><td>la escribe <code>python trazabilidad.py</code></td></tr>
         </tbody>
       </table></div>
+    </section>
+
+
+    <section id="python" aria-labelledby="h-py">
+      <div class="step-h"><span class="n">0</span><h2 id="h-py">Prepara Python, una sola vez</h2></div>
+      <div class="prose">
+        <p>Para el ejercicio de Kiro basta con Python: la lógica, las pruebas y <code>trazabilidad.py</code> solo usan la biblioteca estándar. El entorno virtual y <code>requirements.txt</code> hacen falta para el resto del laboratorio: <code>dms_lab.py</code>, que usa la cámara con MediaPipe, y <code>bench_quant.py</code>, que compara el modelo en FP32, FP16 e INT8.</p>
+        <p>Descomprime el laboratorio en una ruta sin acentos ni espacios, como <code>C:\lab_edge_ai</code>. Si al descomprimir quedó una subcarpeta <code>laboratorio_edge_ai</code>, trabaja dentro de ella. Luego, en PowerShell:</p>
+      </div>
+      <div class="code "><p class="lab"><span>En PowerShell, en la carpeta del laboratorio</span><button class="copy" type="button" data-copy="c-venv">Copiar</button></p><pre id="c-venv">cd C:\lab_edge_ai
+python --version
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt</pre></div>
+      <div class="prose">
+        <ul class="plain">
+          <li><code>python --version</code> debe decir 3.12 o 3.13. Si tienes el lanzador <code>py</code>, puedes elegir la versión con <code>py -3.13 -m venv .venv</code>.</li>
+          <li>Al activar el entorno, la línea de PowerShell empieza con <code>(.venv)</code>. Desde ahí, <code>python</code> y <code>pip</code> son los del entorno.</li>
+          <li><code>requirements.txt</code> instala mediapipe 0.10.32, la versión con la que se probó el laboratorio, además de onnx, ml_dtypes y onnxruntime-gpu con CUDA y cuDNN.</li>
+        </ul>
+        <p>Comprueba la instalación:</p>
+      </div>
+      <div class="code "><p class="lab"><span>Con el entorno activado</span><button class="copy" type="button" data-copy="c-verifica">Copiar</button></p><pre id="c-verifica">python -c &quot;import mediapipe; print(mediapipe.__version__)&quot;
+python -c &quot;import onnxruntime as ort; ort.preload_dlls(); print(ort.get_available_providers())&quot;</pre></div>
+      <div class="prose"><p>La primera línea debe decir <code>0.10.32</code> y la segunda debe incluir <code>CUDAExecutionProvider</code>.</p></div>
+      <div class="callout teal">
+        <p class="k">Si algo falla</p>
+        <ul class="plain">
+          <li><strong>«La ejecución de scripts está deshabilitada en este sistema»:</strong> corre <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> y vuelve a activar el entorno.</li>
+          <li><strong>PowerShell no reconoce <code>py</code>:</strong> usa <code>python</code>; <code>py</code> solo viene con el instalador de python.org.</li>
+          <li><strong>No tienes GPU NVIDIA</strong>, por ejemplo en una Mac: en <code>requirements.txt</code> cambia <code>onnxruntime-gpu[cuda,cudnn]</code> por <code>onnxruntime</code> y, al comprobar, quita <code>ort.preload_dlls();</code>. El banco medirá solo la CPU.</li>
+          <li><strong>En macOS o Linux</strong> el entorno se crea con <code>python3 -m venv .venv</code> y se activa con <code>source .venv/bin/activate</code>.</li>
+          <li><strong>En la terminal de Kiro</strong> también puedes activar el entorno con la ruta completa: <code>C:\lab_edge_ai\.venv\Scripts\Activate.ps1</code>. Para el ejercicio no es obligatorio.</li>
+        </ul>
+      </div>
     </section>
 
     <section id="paso-1" aria-labelledby="h-1">
@@ -425,7 +462,8 @@ python trazabilidad.py --estricto; echo $LASTEXITCODE</pre></div>
           <tr><td>No aparecen las reglas en Agent Steering</td><td>Abriste la carpeta de arriba. Abre <code>kiro_inicio</code> misma.</td></tr>
           <tr><td>«Missing recommended section ## Glossary»</td><td>Kiro revisa los títulos en inglés. Cambia <code>## Glosario</code> por <code>## Glossary</code>; el contenido sigue en español.</td></tr>
           <tr><td>PowerShell no reconoce <code>py</code></td><td>Usa <code>python</code>; <code>py</code> solo viene con el instalador de python.org.</td></tr>
-          <tr><td>No encuentra <code>.venv\Scripts\Activate.ps1</code></td><td>El entorno no existe: <code>python -m venv .venv</code>. Para Kiro no hace falta, todo usa la biblioteca estándar.</td></tr>
+          <tr><td>No encuentra <code>.venv\Scripts\Activate.ps1</code></td><td>El entorno no existe o estás en otra carpeta. Revisa con <code>Get-ChildItem -Force</code> y créalo con <code>python -m venv .venv</code> (paso 0).</td></tr>
+          <tr><td>«La ejecución de scripts está deshabilitada»</td><td><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> y vuelve a activar.</td></tr>
           <tr><td>Las tareas de pruebas tienen asterisco</td><td>Son opcionales para Kiro. Pide que las haga obligatorias: sin pruebas no hay matriz.</td></tr>
           <tr><td>Accept o Reject junto a un archivo</td><td>Accept conserva el archivo; Reject lo descarta. Las correcciones se piden en el chat.</td></tr>
         </tbody>
