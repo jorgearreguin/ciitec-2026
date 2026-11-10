@@ -9,6 +9,7 @@ Sitio: https://jorgearreguin.github.io/ciitec-2026/
 | `index.html` | Portada con los enlaces al material |
 | `presentacion.pdf` | Las diapositivas |
 | `demo.html` | Demo interactiva «Cómo ve una CNN»; funciona sin internet |
+| `DMS_Edge_AI_10_pasos.mp4` | Video: el DMS con Edge AI, en 10 pasos |
 | `laboratorio/laboratorio_edge_ai.zip` | Laboratorio: Kiro, trazabilidad, lógica del DMS y cuantización |
 | `laboratorio/c/` | La tabla de verdad de la alerta en C y sus pruebas |
 | `kiro/` | Tutorial paso a paso con Kiro: capturas, la spec revisada, el código, las pruebas y la matriz de trazabilidad |
