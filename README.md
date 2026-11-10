@@ -12,6 +12,7 @@ Sitio: https://jorgearreguin.github.io/ciitec-2026/
 | `laboratorio/laboratorio_edge_ai.zip` | Laboratorio: Kiro, trazabilidad, lógica del DMS y cuantización |
 | `laboratorio/c/` | La tabla de verdad de la alerta en C y sus pruebas |
 | `kiro/` | Tutorial paso a paso con Kiro: capturas, la spec revisada, el código, las pruebas y la matriz de trazabilidad |
+| `revision/` | «Lo que la IA no vio»: revisión de una especificación del DMS generada con IA, con 11 hallazgos y cómo corregirlos |
 | `qr/` | El código QR que lleva a este sitio, en PNG y SVG |
 
 Para compilar y correr las pruebas en C:
