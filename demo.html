@@ -340,7 +340,7 @@ footer { font-size: 13px; color: var(--dim); margin-top: auto; }
       <button class="btn" id="t-reset" type="button">Pesos al azar</button>
     </div>
     <div class="controls" id="t-lr"></div>
-    <ul class="points"><li><b>Paso a paso</b> sigue un solo ejemplo por los cuatro pasos, con los números reales.</li><li><b>Entrenar</b> repite el ciclo con los 48 ejemplos: la frontera se acomoda entre los puntos y la curva de error baja.</li><li><b>La tasa de aprendizaje</b> es el tamaño del paso: con 0.3 avanza lento, con 2 converge en segundos y con 12 se pasa de largo y la red deja de aprender.</li></ul>
+    <ul class="points"><li><b>Paso a paso</b> sigue un solo ejemplo por los cuatro pasos, con los números reales. El paso 3 toma dos clics: primero la salida y luego la capa oculta.</li><li><b>La culpa se reparte en proporción:</b> cada peso recibe la culpa de su neurona multiplicada por lo que entró por él, y cada neurona oculta recibe la culpa de la salida multiplicada por su peso hacia ella. Si su ReLU estaba apagada, no recibe nada.</li><li><b>Entrenar</b> repite el ciclo con los 48 ejemplos: la frontera se acomoda entre los puntos y la curva de error baja.</li><li><b>La tasa de aprendizaje</b> es el tamaño del paso: con 0.3 avanza lento, con 2 converge en segundos y con 12 se pasa de largo y la red deja de aprender.</li></ul>
   </div>
 </section>
 
@@ -1147,7 +1147,8 @@ function getK(o, k) { const [t, j, i] = k.split('-'); return t === 'w1' ? o.W1[+
 function wName(k) { const [t, j, i] = k.split('-'); return t === 'w1' ? `${IN_NAMES[+i]} → n${+j + 1}` : `n${+j + 1} → salida`; }
 function drawNet(svg, n, x, o = {}) {
   const f = predict(n, x), G = o.grads, E = edgesOf(n);
-  const maxG = G ? Math.max(1e-9, ...E.map((e) => Math.abs(getK(G, e.k)))) : 1;
+  const pend = (e) => G && o.gradOnly === 'w2' && e.k.startsWith('w1');
+  const maxG = G ? Math.max(1e-9, ...E.filter((e) => !pend(e)).map((e) => Math.abs(getK(G, e.k)))) : 1;
   let s = '';
   for (const e of E) {
     const v = G ? getK(G, e.k) : e.w, a = Math.abs(v);
@@ -1156,16 +1157,17 @@ function drawNet(svg, n, x, o = {}) {
     const op = G ? 0.25 + 0.75 * a / maxG : 0.9;
     const L = `x1="${e.a[0]}" y1="${e.a[1]}" x2="${e.b[0]}" y2="${e.b[1]}"`;
     if (o.cut && o.cut.has(e.k)) { s += `<line ${L} stroke="#3A4F6C" stroke-width="2" stroke-dasharray="5 7"/>`; continue; }
+    if (pend(e)) { s += `<line ${L} stroke="#2A3F5C" stroke-width="2" stroke-linecap="round"/>`; continue; }
     if (o.sel === e.k) s += `<line ${L} stroke="#EEF1F5" stroke-width="${(wd + 7).toFixed(1)}" stroke-linecap="round" opacity=".8"/>`;
     s += `<line ${L} stroke="${col}" stroke-width="${wd.toFixed(1)}" stroke-linecap="round" opacity="${op.toFixed(2)}"/>`;
   }
   for (const e of E) {
     const v = G ? getK(G, e.k) : e.w, sel = o.sel === e.k;
     const lx = e.a[0] + (e.b[0] - e.a[0]) * e.t, ly = e.a[1] + (e.b[1] - e.a[1]) * e.t;
-    const cutE = o.cut && o.cut.has(e.k), tc = cutE ? '#5D7699' : G ? '#F5A524' : v >= 0 ? '#7FD6E1' : '#FF9A80';
+    const cutE = o.cut && o.cut.has(e.k), pe = pend(e), tc = cutE || pe ? '#5D7699' : G ? '#F5A524' : v >= 0 ? '#7FD6E1' : '#FF9A80';
     s += `<g class="hit" data-e="${e.k}"><line x1="${e.a[0]}" y1="${e.a[1]}" x2="${e.b[0]}" y2="${e.b[1]}" stroke="transparent" stroke-width="18"/>`
       + `<rect x="${(lx - 36).toFixed(1)}" y="${(ly - 15).toFixed(1)}" width="72" height="30" rx="7" fill="#0B1524" stroke="${sel ? '#EEF1F5' : '#2A3F5C'}" stroke-width="${sel ? 2 : 1}"/>`
-      + `<text x="${lx.toFixed(1)}" y="${(ly + 6).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono, Courier New, monospace" font-size="16" font-weight="700" fill="${tc}">${cutE ? 'podado' : sgn(v, G ? 3 : 2)}</text></g>`;
+      + `<text x="${lx.toFixed(1)}" y="${(ly + 6).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono, Courier New, monospace" font-size="16" font-weight="700" fill="${tc}">${cutE ? 'podado' : pe ? '…' : sgn(v, G ? 3 : 2)}</text></g>`;
   }
   const maxH = Math.max(1, ...f.h);
   const node = (cx, cy, t, key, txt) => {
@@ -1175,8 +1177,8 @@ function drawNet(svg, n, x, o = {}) {
   };
   const lab = (x, y, txt, anchor, col, size) => `<text x="${x}" y="${y}" text-anchor="${anchor}" font-family="Inter, Arial, sans-serif" font-size="${size}" fill="${col}">${txt}</text>`;
   NL.in.forEach(([cx, cy], i) => { s += node(cx, cy, x[i], 'in-' + i, x[i].toFixed(2)) + lab(cx - 40, cy + 6, IN_NAMES[i], 'end', '#B9C4D3', 18); });
-  NL.hid.forEach(([cx, cy], j) => { s += node(cx, cy, f.h[j] / maxH, 'hid-' + j, f.h[j].toFixed(2)) + lab(cx, cy - 40, 'n' + (j + 1), 'middle', '#B9C4D3', 17) + lab(cx, cy + 52, 'b ' + sgnP(n.b1[j]), 'middle', '#8C99AB', 15); });
-  s += node(NL.out[0], NL.out[1], f.p, 'out', f.p.toFixed(2)) + lab(NL.out[0], NL.out[1] + 54, 'P(abierto)', 'middle', '#B9C4D3', 17) + lab(NL.out[0], NL.out[1] + 74, 'b ' + sgnP(n.b2), 'middle', '#8C99AB', 15);
+  NL.hid.forEach(([cx, cy], j) => { s += node(cx, cy, f.h[j] / maxH, 'hid-' + j, f.h[j].toFixed(2)) + lab(cx, cy - 40, 'n' + (j + 1), 'middle', '#B9C4D3', 17) + lab(o.hidLab ? cx + 18 : cx, cy + 52, o.hidLab ? o.hidLab[j] : 'b ' + sgnP(n.b1[j]), 'middle', o.hidLab ? '#F5A524' : '#8C99AB', 15); });
+  s += node(NL.out[0], NL.out[1], f.p, 'out', f.p.toFixed(2)) + lab(NL.out[0], NL.out[1] + 54, 'P(abierto)', 'middle', '#B9C4D3', 17) + lab(NL.out[0], NL.out[1] + 74, 'b ' + sgnP(n.b2), 'middle', '#8C99AB', 15) + (o.outLab ? lab(NL.out[0], NL.out[1] + 96, o.outLab, 'middle', '#F5A524', 15) : '');
   s += lab(120, 384, 'Entradas', 'middle', '#8C99AB', 15) + lab(330, 384, 'Capa oculta · ReLU', 'middle', '#8C99AB', 15) + lab(545, 384, 'Salida · sigmoide', 'middle', '#8C99AB', 15);
   svg.innerHTML = s;
   return f;
@@ -1229,14 +1231,16 @@ const TR = { net: initNet(41), lr: 2, running: false, acc: 0, u: 0, runStart: 0,
 function recordT() { const r = evalNet(TR.net); TR.hist.push({ u: TR.u, loss: r.loss, ok: r.ok }); if (r.ok === DATA.length && r.loss < 0.05) netFinal = cloneNet(TR.net); }
 recordT();
 function worstEx() { let b = 0, bl = -1; DATA.forEach((d, i) => { const l = lossOf(predict(TR.net, d.x).p, d.y); if (l > bl) { bl = l; b = i; } }); return b; }
-function bestEdge(g) { let b = 'w2-0', bv = -1; for (const e of edgesOf(TR.net)) { const v = Math.abs(getK(g, e.k)); if (v > bv) { bv = v; b = e.k; } } return b; }
+function bestEdge(g, pre = '') { let b = pre === 'w1' ? 'w1-0-0' : 'w2-0', bv = -1; for (const e of edgesOf(TR.net)) { if (pre && !e.k.startsWith(pre)) continue; const v = Math.abs(getK(g, e.k)); if (v > bv) { bv = v; b = e.k; } } return b; }
 function playT(on) { TR.running = on; TR.acc = 0; if (on) { TR.phase = -1; TR.runStart = TR.u; } $('t-play').textContent = on ? '❚❚ Pausa' : '▶ Entrenar'; }
 function stepT(pick) {
   if (TR.running) playT(false);
-  if (pick !== undefined || TR.phase === -1 || TR.phase === 3) { TR.ex = pick !== undefined ? pick : worstEx(); TR.phase = 0; TR.g = null; TR.userSel = null; }
+  if (pick !== undefined || TR.phase === -1 || TR.phase === 4) { TR.ex = pick !== undefined ? pick : worstEx(); TR.phase = 0; TR.g = null; }
   else TR.phase++;
-  if (TR.phase === 2) { TR.g = gradOne(TR.net, DATA[TR.ex]); TR.sel = bestEdge(TR.g); }
-  if (TR.phase === 3) { TR.old = cloneNet(TR.net); TR.L0 = evalNet(TR.net).loss; applyGrad(TR.net, TR.g, TR.lr); TR.u++; recordT(); }
+  TR.userSel = null;
+  if (TR.phase === 2) { TR.g = gradOne(TR.net, DATA[TR.ex]); TR.sel = bestEdge(TR.g, 'w2'); }
+  if (TR.phase === 3) TR.sel = bestEdge(TR.g, 'w1');
+  if (TR.phase === 4) { TR.sel = bestEdge(TR.g); TR.old = cloneNet(TR.net); TR.L0 = evalNet(TR.net).loss; applyGrad(TR.net, TR.g, TR.lr); TR.u++; recordT(); }
   renderT();
 }
 function trainStep() { applyGrad(TR.net, gradBatch(TR.net), TR.lr); TR.u++; recordT(); }
@@ -1261,15 +1265,31 @@ function phaseText() {
     if (last.ok === DATA.length) return `Ya acierta los 48 ejemplos, pero con poca seguridad: el error todavía es ${last.loss.toFixed(2)}. Sigue entrenando hasta que sea casi 0.`;
     return `Presiona «Paso a paso» para seguir un ejemplo por los cuatro pasos, o «Entrenar» para repetirlos cientos de veces. Ahora acierta ${last.ok} de 48: los pesos son casi al azar.`;
   }
-  const p = ph === 3 ? predict(TR.old, d.x).p : predict(TR.net, d.x).p;
+  const p = ph === 4 ? predict(TR.old, d.x).p : predict(TR.net, d.x).p;
   if (ph === 0) return `Ejemplo ${TR.ex + 1}: ojo ${d.y ? 'abierto' : 'cerrado'} (${Math.round(d.o * 100)} % de apertura). Entradas: círculo ${M(d.x[0].toFixed(2))}, línea ${M(d.x[1].toFixed(2))}. La red responde ${M(Math.round(p * 100) + ' %')} abierto.`;
   if (ph === 1) return `La respuesta correcta es ${M(d.y)} (${d.y ? 'abierto' : 'cerrado'}). Se equivocó por ${M(Math.abs(d.y - p).toFixed(2))}. Error = −log(${(d.y ? p : 1 - p).toFixed(2)}) = ${M(lossOf(p, d.y).toFixed(2))}. Si hubiera acertado con seguridad, el error sería casi 0.`;
   const k = TR.userSel || TR.sel, gv = getK(TR.g, k);
-  if (ph === 2) {
-    const tiny = Math.abs(getK(TR.g, TR.sel)) < 0.01 ? 'Casi no hay culpa: la red ya acierta con este ejemplo. ' : '';
-    return `${tiny}De la salida hacia atrás, cada peso recibe su parte de la culpa: el gradiente dice cuánto sube el error si ese peso crece un poquito. Las líneas más gruesas tienen más culpa. <b>${wName(k)}</b>: gradiente ${M(sgn(gv, 3))}.`;
+  if (ph === 2 || ph === 3) {
+    const f = predict(TR.net, d.x), e = f.p - d.y, w2 = TR.net.W2;
+    const cuenta = (key) => {
+      const [tp, j, i] = key.split('-');
+      if (tp === 'w2') return `culpa de la salida × lo que entró por él = ${sgn(e, 3)} × ${f.h[+j].toFixed(3)} = ${sgn(getK(TR.g, key), 3)}`;
+      if (f.z1[+j] <= 0) return `n${+j + 1} estaba apagada, así que no recibió culpa: 0`;
+      return `culpa de n${+j + 1} × lo que entró por él = ${sgn(e * w2[+j], 3)} × ${d.x[+i].toFixed(3)} = ${sgn(getK(TR.g, key), 3)}`;
+    };
+    const tiny = Math.abs(e) < 0.01 ? 'Casi no hay culpa que repartir: la red ya acierta con este ejemplo. ' : '';
+    const mine = TR.userSel ? `<br><b>${wName(k)}</b>: ${M(cuenta(k))}` : '';
+    if (ph === 2) {
+      const filas = [0, 1, 2].map((j) => `n${j + 1} → salida: ${M(`${sgn(e, 3)} × ${f.h[j].toFixed(3)} = ${sgn(e * f.h[j], 3)}`)}${f.h[j] === 0 ? ' · neurona apagada, sin culpa' : ''}`).join('<br>');
+      const signo = e < 0 ? 'La culpa es negativa porque la red se quedó corta: esos pesos van a subir.' : 'Con culpa positiva, esos pesos van a bajar.';
+      return `${tiny}<b>3a · La culpa empieza en la salida.</b> La red dijo ${M(f.p.toFixed(3))} y lo correcto era ${M(d.y)}: el error de la salida es p − y = ${M(sgn(e, 3))}. Cada peso que llega a la salida recibe una parte <b>en proporción a lo que entró por él</b>, la salida de su neurona:<br>${filas}<br>El sesgo de la salida recibe ${M(sgn(e, 3))} completo, porque su entrada siempre vale 1. ${signo}${mine}`;
+    }
+    const filas = [0, 1, 2].map((j) => f.z1[j] > 0 ? `n${j + 1}: ${M(`${sgn(e, 3)} × ${sgn(w2[j], 3)} = ${sgn(e * w2[j], 3)}`)}` : `n${j + 1}: apagada (ReLU = 0), no recibe culpa`).join('<br>');
+    const kk = TR.userSel ? k : TR.sel;
+    return `${tiny}<b>3b · La culpa viaja hacia atrás.</b> Cada neurona oculta recibe una parte de la culpa de la salida <b>en proporción a su peso hacia la salida</b>:<br>${filas}<br>Luego cada una la reparte entre sus pesos de entrada igual que en la salida. <b>${wName(kk)}</b>: ${M(cuenta(kk))}. Da clic en cualquier peso para ver su cuenta.`;
   }
-  return `Cada peso da un paso contra su gradiente: nuevo = viejo − tasa × gradiente. <b>${wName(k)}</b>: ${M(`${sgn(getK(TR.old, k))} − ${TR.lr} × (${sgn(gv, 3)}) = ${sgn(getK(TR.net, k))}`)}. El error promedio pasó de ${M(TR.L0.toFixed(3))} a ${M(last.loss.toFixed(3))}.`;
+  const pNew = predict(TR.net, d.x).p;
+  return `<b>4 · Ajuste.</b> Con la culpa de los 13 parámetros ya calculada, todos se mueven a la vez: nuevo = viejo − tasa × culpa. Con culpa positiva el peso baja; con negativa, sube. <b>${wName(k)}</b>: ${M(`${sgn(getK(TR.old, k))} − ${TR.lr} × (${sgn(gv, 3)}) = ${sgn(getK(TR.net, k))}`)}. Este ejemplo pasó de ${M(Math.round(p * 100) + ' %')} a ${M(Math.round(pNew * 100) + ' %')} abierto, y el error promedio de los 48, de ${M(TR.L0.toFixed(3))} a ${M(last.loss.toFixed(3))}.${last.loss > TR.L0 ? ' El promedio subió: un paso grande con un solo ejemplo arregla ese caso y descompone otros. Por eso, al entrenar de verdad, se promedia la culpa de los 48 ejemplos antes de mover los pesos.' : ''}`;
 }
 function pFast(n, a, b) { let z = n.b2; for (let j = 0; j < 3; j++) { const h = n.W1[j][0] * a + n.W1[j][1] * b + n.b1[j]; if (h > 0) z += n.W2[j] * h; } return 1 / (1 + Math.exp(-z)); }
 function drawPlane(cv, pf, selEx, ref) {
@@ -1371,8 +1391,11 @@ $('t-svg').addEventListener('click', (e) => {
 });
 function renderT() {
   const ph = TR.phase, d = DATA[TR.ex], last = TR.hist[TR.hist.length - 1];
-  drawNet($('t-svg'), TR.net, d.x, { grads: ph === 2 ? TR.g : null, sel: ph >= 2 ? TR.userSel || TR.sel : null, selN: ph === 0 || ph === 1 ? 'out' : null });
-  [...$('t-phases').children].forEach((s, i) => s.classList.toggle('on', i === ph));
+  const fN = ph === 2 || ph === 3 ? predict(TR.net, d.x) : null, eN = fN ? fN.p - d.y : 0;
+  drawNet($('t-svg'), TR.net, d.x, { grads: fN ? TR.g : null, gradOnly: ph === 2 ? 'w2' : null, sel: ph >= 2 ? TR.userSel || TR.sel : null, selN: ph === 0 || ph === 1 ? 'out' : null,
+    outLab: fN ? 'p − y = ' + sgn(eN, 3) : null, hidLab: ph === 3 ? [0, 1, 2].map((j) => 'culpa ' + (fN.z1[j] > 0 ? sgn(eN * TR.net.W2[j]) : '0')) : null });
+  const strip = [0, 1, 2, 2, 3][ph];
+  [...$('t-phases').children].forEach((s, i) => s.classList.toggle('on', i === strip));
   $('t-text').innerHTML = phaseText();
   drawPlane($('t-plane'), (a, b) => pFast(TR.net, a, b), ph >= 0 ? TR.ex : -1);
   drawLoss($('t-loss'), TR.hist);
