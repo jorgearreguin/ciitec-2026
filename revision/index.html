@@ -154,7 +154,7 @@ footer .meta { display: grid; gap: 4px; }
     <h2>Omisiones y calidad</h2>
     <ol>
       <li><a href="#h8"><span>8</span>Faltan requisitos de la regla</a></li>
-      <li><a href="#h9"><span>9</span>No se verifican desde fuera</a></li>
+      <li><a href="#h9"><span>9</span>No se verifican desde fuera del software</a></li>
     </ol>
   </div>
   <div class="ov c-traza">
@@ -162,7 +162,7 @@ footer .meta { display: grid; gap: 4px; }
     <h2>Trazabilidad y forma</h2>
     <ol>
       <li><a href="#h10"><span>10</span>Trazabilidad que no se audita</a></li>
-      <li><a href="#h11"><span>11</span>Restos de copiar y pegar</a></li>
+      <li><a href="#h11"><span>11</span>Referencias incompletas</a></li>
     </ol>
   </div>
 </nav>
@@ -187,7 +187,7 @@ footer .meta { display: grid; gap: 4px; }
       <div class="why">
         <p class="k">El problema</p>
         <p>Cita el protocolo de Euro NCAP, que es una calificación de seguridad, pero no el requisito de la Unión Europea que hace obligatorio el sistema (ADDW). La regla fija dos tiempos máximos según la velocidad: desde 20 km/h, alerta a más tardar a los 6 s; desde 50 km/h, a más tardar a los 3.5 s.</p>
-        <p>Un solo umbral de 3.0 s no es ilegal, porque alerta antes. Pero no sale de ninguna fuente y, en ciudad, alerta en la mitad del tiempo que permite la regla: más falsas alarmas, y un conductor harto apaga el sistema.</p>
+        <p>Un solo umbral de 3.0 s no es ilegal, porque alerta antes. Pero no sale de ninguna fuente y, en ciudad, alerta en la mitad del tiempo que permite la regla: más falsas alarmas, y un conductor que se harta apaga el sistema.</p>
       </div>
     </div>
     <div class="fix">
@@ -381,7 +381,7 @@ footer .meta { display: grid; gap: 4px; }
   <article class="card" id="h9">
     <div class="head">
       <span class="badge">Calidad</span>
-      <h3><span class="n">9</span>Requisitos que no se pueden verificar desde fuera</h3>
+      <h3><span class="n">9</span>Requisitos que no se pueden verificar desde fuera del software</h3>
       <p class="where">R-DMS-02 · R-DMS-03</p>
     </div>
     <div class="cols">
@@ -392,8 +392,8 @@ footer .meta { display: grid; gap: 4px; }
       </div>
       <div class="why">
         <p class="k">El problema</p>
-        <p>DISTRACTED es un estado interno: desde fuera nadie lo ve, así que para probarlo hay que instrumentar el código.</p>
-        <p>Y el texto de la pantalla es una decisión de HMI (idioma, longitud, traducción) metida en un requisito de lógica: si cambia la redacción, cambia un requisito de seguridad.</p>
+        <p>DISTRACTED es un estado interno: desde fuera del software nadie lo puede ver, así que para probarlo hay que instrumentar el código.</p>
+        <p>Y el texto de la pantalla es una decisión de HMI (idioma, longitud, traducción) incorporada en un requisito de lógica: si cambia la redacción, cambia un requisito de seguridad.</p>
       </div>
     </div>
     <div class="fix">
@@ -432,7 +432,7 @@ footer .meta { display: grid; gap: 4px; }
   <article class="card" id="h11">
     <div class="head">
       <span class="badge">Forma</span>
-      <h3><span class="n">11</span>Restos de copiar y pegar</h3>
+      <h3><span class="n">11</span>Referencias incompletas</h3>
       <p class="where">secciones 2, 3 y 5</p>
     </div>
     <div class="cols">
@@ -456,7 +456,7 @@ footer .meta { display: grid; gap: 4px; }
   <h2 id="bien">Lo que sí hizo bien</h2>
   <ul>
     <li>Hizo 12 preguntas útiles, incluidas las de espejos, cámara tapada, repetición y exactitud.</li>
-    <li>Marcó todos los valores como supuestos, no como decisiones, y dijo que deben revisarse con la armadora.</li>
+    <li>Marcó todos los valores como supuestos, no como decisiones, y dijo que deben revisarse con el fabricante/OEM.</li>
     <li>Acertó el mínimo de 20 km/h que pide la regla.</li>
     <li>Usó bien los patrones de EARS y probó fronteras: 20.0 y 19.9 km/h, 2.9 y 3.0 s.</li>
     <li>Su matriz de cobertura coincide con su tabla de pruebas.</li>
